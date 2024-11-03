@@ -1,0 +1,111 @@
+server:
+  port: 9090
+logging:
+  level:
+    root: info
+    com.yc: debug
+    org.springframework: info
+    java.util.concurrent: info
+  file:
+    path: ./logs
+
+spring:
+  application:
+    name: tutor-security   #三个作用： 1.nacos中服务名称 2.配置文件在nacos中的文件名前缀 3.日志文件名称
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848  #nacos的服务地址 根据实际情况修改
+        username: nacos
+        password: nacos
+  cache:
+    type: caffeine   #使用caffeine作为缓存
+    cacheName: tutorsecurity   #缓存名称
+    caffeine:
+      spec: initialCapacity=100,maximumSize=500,expireAfterWrite=10m  #设置缓存的初始容量和最大容量 过期时间
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java #设置重启目录
+      exclude: static/**  #设置classpath目录下的WEB-INF目录的内容修改不重启
+  datasource: #数据库配置
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tutor-cloud?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: jili6416Ga
+    type: com.alibaba.druid.pool.DruidDataSource #特别指定数据源类型，默认是HikariCP，现在变成druid
+    # druid 连接池管理
+    druid:
+      #初始化时建立物理连接的个数
+      initial-size: 5
+      #连接池的最小空闲个数
+      min-idle: 5
+      #连接池最大连接数量
+      max-active: 20
+      #获取连接时最大等待时间  单位：毫秒
+      max-wait: 60000
+      #申请连接的时候检测  如果空闲时间大于timeBeetweenEvictionRunsMillis 执行validationQuery检测连接是否成功
+      test-while-idle: true
+      #既作为检测的间隔时间  又做为testWhileIdle执行的依据
+      time-between-eviction-runs-millis: 60000
+      #销毁线程时检测当前连接的最后活动时间和当前时间差大于该值时 关闭当前连接（配置连接在池中最小生存时间）
+      min-evictable-idle-time-millis: 30000
+      #
+      validation-query: SELECT 'x'
+
+      test-on-borrow: false
+
+      test-on-return: false
+
+      pool-prepared-statements: false
+
+      filters: stat,wall,slf4j
+
+      max-pool-prepared-statement-per-connection-size: -1
+
+      use-global-data-source-stat: true
+      #通过connectP
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+      web-stat-filter:
+
+        enabled: true
+
+        url-pattern: /druid/*
+
+        reset-enable: false
+
+        login-username: druid
+        login-password: druid
+
+        allow: 127.0.0.1
+
+        deny:
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,/webapp/
+#  activemq:
+#    broker-url: tcp://127.0.0.1:61616
+#    queueName: bankMessages
+#  #线程池配置
+#  task:
+#    execution:
+#      pool:
+#        max-size: 16
+#        queue-capacity: 100
+#        keep-alive: "10s"
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启SQL语句打印
+
+management:
+  endpoints:
+    web:        #允许以web形式暴露的端点
+      exposure:
+        include: "*"
+  jmx:          #允许以JMX形式暴露的端点
+    exposure:
+      include: "*"
+
+
