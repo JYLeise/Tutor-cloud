@@ -77,11 +77,19 @@ public class UserController {
             payload.put("userRealName", ((TutorUser) userDetails).getUserRealName());
             payload.put("userSex", ((TutorUser) userDetails).getUserSex());
             payload.put("userBornYear", String.valueOf(((TutorUser) userDetails).getUserBornYear()));
+            payload.put("userIdCard", ((TutorUser) userDetails).getUserIdCard());
             payload.put("userRegional", ((TutorUser) userDetails).getUserRegional());
             payload.put("userDegree", ((TutorUser) userDetails).getUserDegree());
             payload.put("userIdentity", ((TutorUser) userDetails).getUserIdentity());
-            payload.put("role", "user");
+            payload.put("userTeachImg", ((TutorUser) userDetails).getUserEmail());
+            payload.put("userTeachWage", ((TutorUser) userDetails).getUserEmail());
+            payload.put("userTeachGrade", ((TutorUser) userDetails).getUserEmail());
+            payload.put("userTeachType", ((TutorUser) userDetails).getUserEmail());
+            payload.put("userTeachWay", ((TutorUser) userDetails).getUserEmail());
+            payload.put("userTeachMotto", ((TutorUser) userDetails).getUserEmail());
             payload.put("userEmail", ((TutorUser) userDetails).getUserEmail());
+            payload.put("userRole",  ((TutorUser) userDetails).getUserRole());
+
             //生成token
             String jwtToken = jwtUtil.encodeJWT(payload);
 
@@ -100,15 +108,39 @@ public class UserController {
         return ResponseResult.ok( "退出成功" );
     }
 
+    //申请为教师
+    @PostMapping("subtutor")
+    public ResponseResult subtutor(@RequestBody TutorUserVO tutorUserVO){
+        try{
+            //增加用户的教师数据
+            tutorUserBiz.updateUserToTutor(tutorUserVO);
+            return ResponseResult.ok();
+        }catch (Exception e){
+            e.printStackTrace();
+            // 记录详细的错误信息
+            log.error("更新教师信息失败", e);
+            log.error("申请教师失败，错误为："+e.getMessage());
+            return ResponseResult.error();
+        }
+    }
+
+
     //权限认证  只有登录成功后才能访问该接口
     @PostMapping("/check")
-    public ResponseResult check(){
-        log.info( "权限认证成功" );
+    public ResponseResult check() {
+        log.info("权限认证成功");
         // 从 SecurityContext 中获取当前认证的用户信息。
         TutorUser tutorUser = (TutorUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        tutorUser.setPassword( "" );
-        return ResponseResult.ok( "成功" ).setData( tutorUser );
+        tutorUser.setPassword("");
+        System.out.println(tutorUser);
+        if (tutorUser != null) {
+            return ResponseResult.ok("成功").setData(tutorUser);
+        }else{
+            return ResponseResult.error();
+        }
     }
+
+
 
 
 }

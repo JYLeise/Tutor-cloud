@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Base64;
 
 @RestController
-@RequestMapping("/ressecurity")
+@RequestMapping("/tutorsecurity")
 @Slf4j
 public class CaptchaController {
 

@@ -59,9 +59,34 @@ public class TutorUserBizImpl implements TutorUserBiz , UserDetailsService {
         tutorUser.setUserDegree(tutorUserVO.getUserDegree());
         tutorUser.setUserIdentity(tutorUserVO.getUserIdentity());
         tutorUser.setUserEmail( tutorUserVO.getUserEmail() );
+        tutorUser.setUserRole( tutorUserVO.getUserRole() );
         tutorUser.setUid(tutorUserMapper.insert( tutorUser ));
         return tutorUser.getUid();
     }
+
+    //申请成为教师
+    @Transactional
+    @Override
+    public void updateUserToTutor(TutorUserVO tutorUserVO){
+        TutorUser tutorUser = new TutorUser();
+        tutorUser.setUid(tutorUserVO.getUid());
+        tutorUser.setUserRealName(tutorUserVO.getUserRealName());
+        tutorUser.setUserSex(tutorUserVO.getUserSex());
+        tutorUser.setUserBornYear(tutorUserVO.getUserBornYear());
+        tutorUser.setUserIdCard(tutorUserVO.getUserIdCard());
+        tutorUser.setUserRegional(tutorUserVO.getUserRegional());
+        tutorUser.setUserDegree(tutorUserVO.getUserDegree());
+        tutorUser.setUserIdentity(tutorUserVO.getUserIdentity());
+        tutorUser.setUserTeachImg(tutorUserVO.getUserTeachImg());
+        tutorUser.setUserTeachWage(tutorUserVO.getUserTeachWage());
+        tutorUser.setUserTeachGrade(tutorUserVO.getUserTeachGrade());
+        tutorUser.setUserTeachType(tutorUserVO.getUserTeachType());
+        tutorUser.setUserTeachWay(tutorUserVO.getUserTeachWay());
+        tutorUser.setUserTeachMotto(tutorUserVO.getUserTeachMotto());
+        tutorUser.setUserRole(tutorUserVO.getUserRole());
+        tutorUserMapper.updateUserToTutor(tutorUser);
+    }
+
     //用于从数据库中加载用户信息
     //loadUserByUsername(String username) 是 UserDetailsService 接口中的一个方法，Spring Security 在用户认证过程中会调用它
     @Override

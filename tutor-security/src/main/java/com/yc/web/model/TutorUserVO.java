@@ -13,8 +13,16 @@ public class TutorUserVO {
     private String userRealName;  //真实姓名
     private String userSex; //用户性别
     private Integer userBornYear; //用户出生年份
+    private String userIdCard; //用户身份证号
     private String userRegional; //用户地域 省,市,区
     private String userDegree; //用户学历
     private String userIdentity;;  //用户身份
     private String userEmail;  //用户邮箱
+    private String userTeachImg; //用户肖像照片(教师)
+    private String userTeachWage; //用户薪酬(教师)
+    private String userTeachGrade; //用户教授年级(教师)
+    private String userTeachType; //用户教授类型(教师)
+    private String userTeachWay; //用户教授方式(教师)
+    private String userTeachMotto; //用户座右铭(教师)
+    private String userRole; //用户角色
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,6 +38,7 @@ public class TutorUser implements Serializable , UserDetails {
     private String userSex;
     //@TableField("user_born_year")
     private Integer userBornYear;
+    private String userIdCard;
     //@TableField("user_regional")
     private String userRegional;
    // @TableField("user_degree")
@@ -45,12 +47,17 @@ public class TutorUser implements Serializable , UserDetails {
     private String userIdentity;
    // @TableField("user_email")
     private String userEmail;
-    @TableField(exist = false)
-    private String role="user";  //角色  前端传过来的 角色  是 字符串 ， 而数据库中 是 数字 ， 所以 要 转换 一下
+    private String userTeachImg; //用户肖像照片(教师)
+    private String userTeachWage; //用户薪酬(教师)
+    private String userTeachGrade; //用户教授年级(教师)
+    private String userTeachType; //用户教授类型(教师)
+    private String userTeachWay; //用户教授方式(教师)
+    private String userTeachMotto; //用户座右铭(教师)
+    private String userRole; //用户角色
 
     @Override  //用户所拥有的权限  返回的列表中至少得有一个值  否则这个用户啥权限都没有
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role));
+        return List.of(new SimpleGrantedAuthority(userRole));
     }
 
     @Override  //返回用户的密码
@@ -58,6 +65,7 @@ public class TutorUser implements Serializable , UserDetails {
         return this.password;
     }
     @Override  //返回用户的用户名
+    @JsonProperty("userName")  //返回到前端是驼峰命名
     public String getUsername() {
         return this.userName;
     }

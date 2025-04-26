@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.dao.TutorUserMapper">
+
+    <update id="updateUserToTutor" parameterType="com.yc.bean.TutorUser">
+        UPDATE tutor_user
+        SET
+        user_real_name = #{tutorUser.userRealName},
+        user_sex = #{tutorUser.userSex},
+        user_born_year = #{tutorUser.userBornYear},
+        user_id_card = #{tutorUser.userIdCard},
+        user_regional = #{tutorUser.userRegional},
+        user_degree = #{tutorUser.userDegree},
+        user_identity = #{tutorUser.userIdentity},
+        user_teach_img = #{tutorUser.userTeachImg},
+        user_teach_wage = #{tutorUser.userTeachWage},
+        user_teach_grade = #{tutorUser.userTeachGrade},
+        user_teach_type = #{tutorUser.userTeachType},
+        user_teach_way = #{tutorUser.userTeachWay},
+        user_teach_motto = #{tutorUser.userTeachMotto},
+        user_role = #{tutorUser.userRole}
+        WHERE uid = #{tutorUser.uid};
+    </update>
+
+
+</mapper>

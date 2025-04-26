@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: tutor-security
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+        #nacos上配置文件的位置 namespace -> group
+        namespace: public
+        group: DEFAULT_GROUP
+        #文件名： ${prefix}
+        prefix: tutor-security
+        # ${spring.profiles.active} 以命令行参数传过来 选择"Add Vm Option" 输入 -Dspring.profiles.active=xxxx
+
+        # ${file-extension}
+        file-extension: yml
+
+        #新增共享文件配置
+        #若是跟该服务在同一空间同一组则不用写group和namespace
+        #如果有动态更新，则要写成 - {dataId: mysql8.yml,refresh: true}
+        shared-configs:
+            - {dataId: mysql.yml,refresh: true} #开启动态更新
+            - {dataId: actuatorlocal.yml,refresh: true}
+            - {dataId: loglocal.yml,refresh: true}
+            - {dataId: mybatisplus.yml,refresh: true}
+            - {dataId: devtools.yml,refresh: true}
+            - {dataId: caffeine.yml,refresh: true}
+            - {dataId: static_location.yml,refresh: true}

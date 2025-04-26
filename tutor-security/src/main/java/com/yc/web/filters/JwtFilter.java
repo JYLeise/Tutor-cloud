@@ -1,6 +1,7 @@
 package com.yc.web.filters;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yc.service.TutorUserBiz;
 import com.yc.utils.JwtTokenUtil;
 import com.yc.web.model.ResponseResult;
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +22,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 //此过滤器作用: 1. 是否有token  2. token是否有效 3.验证用户名和密码是否匹配
 @Component
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
+    // 使用 Jackson ObjectMapper 转换对象为 JSON
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private JwtTokenUtil jwtUtils;
@@ -34,7 +40,6 @@ public class JwtFilter extends OncePerRequestFilter {
     //Spring Security 过滤器的实现，用于处理 JWT（JSON Web Token）的验证
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         //每次请求头中都要携带token  验证token是否有效
         String jwtTaken = request.getHeader("token"); // 从请求头中获取token
         if(jwtTaken != null && !jwtTaken.isEmpty() && !jwtUtils.isTokenExpired(jwtTaken)){
@@ -57,7 +62,17 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }else {
             log.warn("token为空或已过期或超时，可能未登录");
+            response.setContentType("application/json;charset=utf-8");
+            // 将 ResponseResult 转换为 JSON 字符串
+            String jsonResponse = objectMapper.writeValueAsString(ResponseResult.error("登录已过期，请重新登录！"));
+            response.getWriter().write(jsonResponse);
+            return;
         }
         filterChain.doFilter(request,response); //继续执行过滤器链
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return true;
     }
 }
