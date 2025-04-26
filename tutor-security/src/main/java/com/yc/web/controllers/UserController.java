@@ -5,6 +5,9 @@ import com.yc.service.TutorUserBiz;
 import com.yc.utils.JwtTokenUtil;
 import com.yc.web.model.ResponseResult;
 import com.yc.web.model.TutorUserVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Tag(name="用户信息操作接口")
 @RestController
 @Slf4j
 @RequestMapping("/tutorsecurity")
@@ -27,10 +31,15 @@ public class UserController {
 
     @Autowired
     private TutorUserBiz tutorUserBiz;
-
+    // 注入 认证管理器
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtTokenUtil jwtUtil;
     //注册
+    @Operation(summary = "用户注册接口")
     @PostMapping("/register")
-    public ResponseResult register(@RequestBody @Valid TutorUserVO tutorUserVO){
+    public ResponseResult register(@Parameter(description = "用户信息") @RequestBody @Valid TutorUserVO tutorUserVO){
         try{
             int uid = this.tutorUserBiz.regUser( tutorUserVO );
             tutorUserVO.setUid( uid ); // 注册成功后，将用户id设置到resuser对象中
@@ -42,15 +51,11 @@ public class UserController {
         }
     }
 
-    // 注入 认证管理器
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtTokenUtil jwtUtil;
 
     //登录
+    @Operation(summary = "用户登录接口")
     @PostMapping("/login")
-    public ResponseResult login(@RequestBody TutorUserVO tutorUserVO , HttpSession session) {
+    public ResponseResult login(@Parameter(description = "用户账号密码") @RequestBody TutorUserVO tutorUserVO , HttpSession session) {
         //获取验证码
         // String captcha = (String) session.getAttribute( "captcha" );
         // 验证码校验  验证码  忽略大小写
@@ -101,16 +106,18 @@ public class UserController {
     }
 
     //退出
+    @Operation(summary = "用户登出接口")
     @PostMapping("/logout")
-    public ResponseResult logout(@RequestHeader("Authorization") String token){
+    public ResponseResult logout(@Parameter(description = "token") @RequestHeader("Authorization") String token){
         //这里可以实现JWT 黑名单机制  或者让客户端删除存储的JWT
         //例如 将token 添加到redis黑名单中
         return ResponseResult.ok( "退出成功" );
     }
 
     //申请为教师
+    @Operation(summary = "普通用户申请为教师接口")
     @PostMapping("subtutor")
-    public ResponseResult subtutor(@RequestBody TutorUserVO tutorUserVO){
+    public ResponseResult subtutor(@Parameter(description = "用户的教师信息") @RequestBody TutorUserVO tutorUserVO){
         try{
             //增加用户的教师数据
             tutorUserBiz.updateUserToTutor(tutorUserVO);
@@ -126,6 +133,7 @@ public class UserController {
 
 
     //权限认证  只有登录成功后才能访问该接口
+    @Operation(summary = "权限验证接口")
     @PostMapping("/check")
     public ResponseResult check() {
         log.info("权限认证成功");
@@ -139,8 +147,6 @@ public class UserController {
             return ResponseResult.error();
         }
     }
-
-
 
 
 }

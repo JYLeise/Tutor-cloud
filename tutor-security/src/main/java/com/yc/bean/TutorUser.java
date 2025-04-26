@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 //PO类 ： 与数据表相关
+
 @TableName("tutor_user")
 @Data
 public class TutorUser implements Serializable , UserDetails {

@@ -2,6 +2,7 @@ package com.yc.web.controllers;
 
 import com.github.cage.Cage;
 import com.github.cage.GCage;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.Base64;
-
+@Tag(name="验证码接口")
 @RestController
 @RequestMapping("/tutorsecurity")
 @Slf4j
