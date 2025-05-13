@@ -19,7 +19,7 @@ target/
 *.iml
 *.ipr
 
-logs/spring.log
+logs/
 
 ### NetBeans ###
 /nbproject/private/
