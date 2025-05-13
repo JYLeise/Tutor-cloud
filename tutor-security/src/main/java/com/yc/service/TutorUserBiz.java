@@ -1,5 +1,6 @@
 package com.yc.service;
 
+import com.yc.bean.TutorUser;
 import com.yc.web.model.TutorUserVO;
 
 public interface TutorUserBiz {
@@ -7,5 +8,5 @@ public interface TutorUserBiz {
     //ResuserVO是前端传给后端的数据
     public Integer regUser(TutorUserVO tutorUserVO);
 
-    public void updateUserToTutor(TutorUserVO tutorUserVO);
+    public void updateUserToTutor(TutorUser tutorUser);
 }

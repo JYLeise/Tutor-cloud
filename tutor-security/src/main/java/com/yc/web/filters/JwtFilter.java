@@ -19,10 +19,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 //此过滤器作用: 1. 是否有token  2. token是否有效 3.验证用户名和密码是否匹配
 @Component
@@ -36,6 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private TutorUserBiz tutorUserBiz;
+
 
     //Spring Security 过滤器的实现，用于处理 JWT（JSON Web Token）的验证
     @Override
@@ -61,7 +64,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 log.error(e.getMessage());
             }
         }else {
-            log.warn("token为空或已过期或超时，可能未登录");
             response.setContentType("application/json;charset=utf-8");
             // 将 ResponseResult 转换为 JSON 字符串
             String jsonResponse = objectMapper.writeValueAsString(ResponseResult.error("登录已过期，请重新登录！"));
@@ -73,6 +75,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return true;
+        // 定义需要忽略的路径列表
+        List<String> excludePaths = Arrays.asList(
+                "/api/security/login",
+                "/api/security/register",
+                "/api/security/captcha",
+                "/api/security/api-docs/**",
+                "/api/security/swagger-ui/**"
+        );
+
+        // 使用 Ant 风格路径匹配（支持通配符）
+        return excludePaths.stream()
+                .anyMatch(path -> new AntPathMatcher().match(path, request.getServletPath()));
     }
 }

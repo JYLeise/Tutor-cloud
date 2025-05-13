@@ -25,3 +25,12 @@ spring:
           - {dataId: actuatorlocal.yml,refresh: true}
           - {dataId: loglocal.yml,refresh: true}
           - {dataId: logback.xml,refresh: true}
+          - {dataId: mysql.yml,refresh: true } #开启动态更新
+          - {dataId: mybatisplus.yml,refresh: true }
+          - {dataId: static_location.yml,refresh: true }
+
+    sentinel:  #sentinel配置
+      transport:
+        port: 8731                  #跟控制台交流的端口,随意指定一个未使用的端口即可
+        dashboard: localhost:9999   #dashboard地址与端口
+      eager: true                   #表示 Sentinel 会在应用启动时立即进行初始化。这意味着 Sentinel 会立即加载规则、统计信息等相关的数据，并开始监控和限流

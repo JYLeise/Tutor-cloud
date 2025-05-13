@@ -1,6 +1,8 @@
 package com.yc.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class TutorUserVO {
@@ -25,4 +27,7 @@ public class TutorUserVO {
     private String userTeachWay; //用户教授方式(教师)
     private String userTeachMotto; //用户座右铭(教师)
     private String userRole; //用户角色
+
+    @JsonIgnore
+    private MultipartFile imgfile;
 }

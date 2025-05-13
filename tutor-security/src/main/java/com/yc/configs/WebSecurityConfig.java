@@ -69,8 +69,8 @@ public class WebSecurityConfig {
                 .sessionManagement( session -> session.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) ) // 禁用session 因为我们已经使用了jwt 所以不需要session
                 .httpBasic(AbstractHttpConfigurer::disable) // 禁用httpBasic 因为我们传输数据用的是post 而且请求体是JSON
                 .authorizeHttpRequests( auth ->auth
-                                .requestMatchers(HttpMethod.POST, "/tutorsecurity/login","/tutorsecurity/register").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/tutorsecurity/captcha","/tutorsecurity/api-docs/**","/tutorsecurity/swagger-ui/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/security/login","/api/security/register").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/security/captcha","/api/security/api-docs/**","/api/security/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated())   //其余均要身份认证
                 .addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class); // 其他请求都需要认证  登录后才能访问
         // 将用户授权时用到的JWT校验过滤器添加进SecurityFilterChain中  UsernamePasswordAuthenticationFilter 过滤器之前

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Base64;
 @Tag(name="验证码接口")
 @RestController
-@RequestMapping("/tutorsecurity")
+@RequestMapping("/api/security")
 @Slf4j
 public class CaptchaController {
 

@@ -67,7 +67,7 @@ public class TutorUserBizImpl implements TutorUserBiz , UserDetailsService {
     //申请成为教师
     @Transactional
     @Override
-    public void updateUserToTutor(TutorUserVO tutorUserVO){
+    public void updateUserToTutor(TutorUser tutorUserVO){
         TutorUser tutorUser = new TutorUser();
         tutorUser.setUid(tutorUserVO.getUid());
         tutorUser.setUserRealName(tutorUserVO.getUserRealName());

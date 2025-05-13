@@ -46,6 +46,29 @@
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
 
+        <!--            jwt认证模块-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+        <!--            jwt api impl 实现-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+        <!--            jwt json-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
         <!-- 引入riboon，客户端保存服务列表信息 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -75,6 +98,11 @@
         <dependency>
             <groupId>io.zipkin.reporter2</groupId>
             <artifactId>zipkin-reporter-brave</artifactId>
+        </dependency>
+        <!-- 导入sentinel依赖 完成服务治理工作 熔断、限流、降级 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
     </dependencies>
 </project>

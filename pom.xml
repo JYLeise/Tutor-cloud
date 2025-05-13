@@ -17,6 +17,7 @@
 		<module>tutor-security</module>
         <module>tutor-gateway</module>
         <module>tutor-test</module>
+        <module>test_sentinel</module>
     </modules>
 
 	<parent>

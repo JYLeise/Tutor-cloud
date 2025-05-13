@@ -1,6 +1,7 @@
 package com.yc.web.controllers;
 
 import com.yc.bean.TutorUser;
+import com.yc.service.FileBiz;
 import com.yc.service.TutorUserBiz;
 import com.yc.utils.JwtTokenUtil;
 import com.yc.web.model.ResponseResult;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,15 +24,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Tag(name="用户信息操作接口")
 @RestController
 @Slf4j
-@RequestMapping("/tutorsecurity")
+@RequestMapping("/api/security")
 public class UserController {
 
     @Autowired
     private TutorUserBiz tutorUserBiz;
+    @Autowired
+    private FileBiz fileBiz;
     // 注入 认证管理器
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -116,11 +121,25 @@ public class UserController {
 
     //申请为教师
     @Operation(summary = "普通用户申请为教师接口")
-    @PostMapping("subtutor")
-    public ResponseResult subtutor(@Parameter(description = "用户的教师信息") @RequestBody TutorUserVO tutorUserVO){
+    @PostMapping("/subtutor")
+    public ResponseResult subtutor(@Parameter(description = "用户的教师信息") @ModelAttribute TutorUserVO tutorUserVO){
         try{
+            String imgFilePath = "";  // 上传图片的位置
+            //异步上传图片  异步操作
+            CompletableFuture<String> fileUrlFuture = fileBiz.upload(tutorUserVO.getImgfile());
+            //阻塞当前线程直到异步操作完成
+            imgFilePath = fileUrlFuture.get();
+
+            TutorUser tutorUser = new TutorUser(); //PO对象，数据库表的字段
+
+            //VO -> PO  字段的复制
+            //忽略  fphotofile  字段  不复制
+            BeanUtils.copyProperties(tutorUserVO, tutorUser);
+
+            tutorUser.setUserTeachImg(imgFilePath); // OSS中图片的地址存入PO中
+            tutorUserBiz.updateUserToTutor(tutorUser);// 插入数据库  返回主键值
+            tutorUserVO.setUserTeachImg(imgFilePath); // OSS中图片的地址存入VO中
             //增加用户的教师数据
-            tutorUserBiz.updateUserToTutor(tutorUserVO);
             return ResponseResult.ok();
         }catch (Exception e){
             e.printStackTrace();
@@ -136,17 +155,13 @@ public class UserController {
     @Operation(summary = "权限验证接口")
     @PostMapping("/check")
     public ResponseResult check() {
-        log.info("权限认证成功");
         // 从 SecurityContext 中获取当前认证的用户信息。
         TutorUser tutorUser = (TutorUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         tutorUser.setPassword("");
-        System.out.println(tutorUser);
         if (tutorUser != null) {
             return ResponseResult.ok("成功").setData(tutorUser);
         }else{
             return ResponseResult.error();
         }
     }
-
-
 }

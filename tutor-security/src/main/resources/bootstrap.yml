@@ -1,6 +1,8 @@
 spring:
   application:
     name: tutor-security
+  main:
+    allow-circular-references: true
   cloud:
     nacos:
       config:
@@ -28,3 +30,10 @@ spring:
             - {dataId: devtools.yml,refresh: true}
             - {dataId: caffeine.yml,refresh: true}
             - {dataId: static_location.yml,refresh: true}
+            - {dataId: aliyun.yml,refresh: true}
+            - {dataId: taskpool.yml,refresh: true}
+    sentinel:  #sentinel配置
+      transport:
+        port: 8730                  #跟控制台交流的端口,随意指定一个未使用的端口即可
+        dashboard: localhost:9999   #dashboard地址与端口
+      eager: true                   #表示 Sentinel 会在应用启动时立即进行初始化。这意味着 Sentinel 会立即加载规则、统计信息等相关的数据，并开始监控和限流

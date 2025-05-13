@@ -179,6 +179,44 @@
             <version>1.0</version>
         </dependency>
 
+        <!-- 阿里云OSS -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.15.1</version>
+            <!-- 强制排除所有旧版 JAXB 组件 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jaxb-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>activation</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- 添加 Jakarta EE 9+ 的 JAXB 实现 -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>4.0.3</version>
+        </dependency>
+
+
         <!--micrometer-tracing指标追踪  1-->
         <dependency>
             <groupId>io.micrometer</groupId>
@@ -204,7 +242,11 @@
             <groupId>io.zipkin.reporter2</groupId>
             <artifactId>zipkin-reporter-brave</artifactId>
         </dependency>
-
+        <!-- 导入sentinel依赖 完成服务治理工作 熔断、限流、降级 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
     </dependencies>
 
     <!--    springboot构建工具-->
